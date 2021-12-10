@@ -1,8 +1,8 @@
 # Set CMake version number
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.13)
 
 # Change "Temp-Projekt" to your project name
-project(Temp-Projekt VERSION 0.1.0)
+project(Learn-openGL VERSION 0.1.0)
 
 # Add locations of other CMakelists.txt (one per call)
 add_subdirectory(
@@ -31,20 +31,19 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
      $<$<CONFIG:MinSizeRel>:DEBUG_ONLY=0>
 )
 
-# Add include directory here:
-include_directories(
-    PUBLIC src
+add_subdirectory(
+    external/glfw
 )
 
-# Add target include directory here: (I have no clue what the differance is tbh)
+# Add target include directory here:
 target_include_directories(${PROJECT_NAME}
-    PUBLIC src
+    PUBLIC external/glfw/include
 )
 
 # Add target link directory here: (Where the Libs are)
 target_link_directories(${PROJECT_NAME}
-     PRIVATE src
+    PRIVATE external/glfw/src
 )
 
 # Link needed Libs:
-# target_link_libraries(${PROJECT_NAME} "LIB NAME")
+target_link_libraries(${PROJECT_NAME} glfw)
