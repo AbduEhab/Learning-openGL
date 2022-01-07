@@ -1,33 +1,104 @@
-#include <glad/glad.h>
-#include <iostream>
+#include <Engine.h>
 
-#include <GLFW/glfw3.h>
+double TICKS_LAST_FRAME = 0;
 
-void Update()
+static double deltaTime = glfwGetTime();
+
+static Engine::Window *window;
+
+struct Vertex
 {
+    glm::vec3 position;
+    glm::vec4 color;
+};
+
+void Update(float deltatime)
+{
+    {
+        deltaTime = glfwGetTime() - TICKS_LAST_FRAME;
+
+        std::cout << deltaTime << std::endl;
+
+        TICKS_LAST_FRAME = glfwGetTime();
+
+        if (Engine::Input::is_key_down(GLFW_KEY_ESCAPE))
+        {
+            window->close();
+        }
+
+        if (Engine::Input::is_key_down(GLFW_KEY_ENTER) && Engine::Input::is_key_down(GLFW_KEY_RIGHT_ALT))
+        {
+            return; // temp till I figure out why it lags
+
+            bool full = window->_is_fullscreen;
+
+            glfwDestroyWindow(window->_window);
+
+            window = Engine::Window::create_window(!full);
+
+            std::cout << "comb reg" << std::endl;
+        }
+    }
 }
+
+// const Vertex challenge1Square[]{
+//     {glm::vec3{-0.4f, 0.125f, 0.0f}, glm::vec4{0.4f, 0.521f, 0.960f, 1.0f}},
+//     {glm::vec3{-0.125f, 0.125f, 0.0f}, glm::vec4{0.490f, 0.443f, 0.956f, 1.0f}},
+//     {glm::vec3{0.0f, 0.5f, 0.0f}, glm::vec4{0.686f, 0.443f, 0.956f, 1.0f}},
+//     {glm::vec3{0.125f, 0.125f, 0.0f}, glm::vec4{0.917f, 0.443f, 0.956f, 1.0f}},
+//     {glm::vec3{0.4f, 0.125f, 0.0f}, glm::vec4{0.807f, 0.317f, 0.250f, 1.0f}},
+//     {glm::vec3{0.13f, -0.125f, 0.0f}, glm::vec4{0.807f, 0.250f, 0.682f, 1.0f}},
+//     {glm::vec3{0.29f, -0.6f, 0.0f}, glm::vec4{0.956f, 0.631f, 0.443f, 1.0f}},
+//     {glm::vec3{0.0f, -0.29f, 0.0f}, glm::vec4{0.956f, 0.843f, 0.443f, 1.0f}},
+//     {glm::vec3{-0.29f, -0.6f, 0.0f}, glm::vec4{0.862f, 0.956f, 0.443f, 1.0f}},
+//     {glm::vec3{-0.13f, -0.125f, 0.0f}, glm::vec4{0.584f, 0.956f, 0.443f, 1.0f}},
+
+// };
+
+const Vertex challenge1Square[]{
+    {glm::vec3(-0.5, -0.5, 0), glm::vec4(.9f, .8f, .2f, 1)},
+    {glm::vec3(-0.5, 0.5, 0), glm::vec4(.2f, .9f, .8f, 1)},
+    {glm::vec3(0.5, 0.5, 0), glm::vec4(.8f, .2f, .9f, 1)},
+    {glm::vec3(0.5, -0.5, 0), glm::vec4(.2f, .9f, .8f, 1)},
+
+};
+
+const int challenge1Elements[]{0, 1, 1, 2, 2, 3, 3, 0};
 
 void Render(GLFWwindow *window)
 {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
-}
 
-void HandleKeyboardInput(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-}
+    glClearColor(0.266f, 0.466f, 0.698f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-void HandleCursorInput(GLFWwindow *window, double xpos, double ypos)
-{
-}
+    uint32_t challenge1Vao;
+    uint32_t challenge1Vbo;
+    uint32_t challenge1Ebo;
 
-void HandleMouseInput(GLFWwindow *window, int button, int action, int mods)
-{
-    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-        ;
+    glCreateVertexArrays(1, &challenge1Vao);
+    glBindVertexArray(challenge1Vao);
+
+    glGenBuffers(1, &challenge1Vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, challenge1Vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(challenge1Square), challenge1Square, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, color));
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, position));
+    glEnableVertexAttribArray(1);
+
+    glGenBuffers(1, &challenge1Ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, challenge1Ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(challenge1Elements), challenge1Elements, GL_STATIC_DRAW);
+
+    glBindVertexArray(challenge1Vao);
+    glDrawElements(GL_LINES, 8, GL_UNSIGNED_INT, 0);
+
+    glfwSwapBuffers(window);
 }
 
 void error_callback(int error, const char *description)
@@ -45,43 +116,19 @@ int main(int, char **)
         return -1;
     }
 
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-    glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-    glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
-    glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
-    glfwWindowHint(GLFW_CENTER_CURSOR, GLFW_TRUE);
-    glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_FALSE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    window = Engine::Window::create_window(1280, 720, "Learning-GL", false);
 
-    GLFWwindow *window = glfwCreateWindow(1280, 720, "Learning-openGL", NULL, NULL);
+    // gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-    if (!window)
-    {
-        std::cout << "[ERROR]: GLFW failed to create a window." << std::endl;
-        return -1;
-    }
+    gladLoadGL();
 
-    glfwMakeContextCurrent(window);
-
-    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-
-    glfwSetKeyCallback(window, HandleKeyboardInput);
-
-    glfwSetCursorPosCallback(window, HandleCursorInput);
-
-    glfwSetMouseButtonCallback(window, HandleMouseInput);
-
-    if (glfwRawMouseMotionSupported())
-        glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(window->_window))
     {
         glfwPollEvents();
-        Update();
-        Render(window);
+        Update(deltaTime);
+        Render(window->_window);
     }
 
-    glfwDestroyWindow(window);
+    Engine::Window::free_window(window);
     glfwTerminate();
 }

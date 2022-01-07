@@ -39,17 +39,28 @@ add_subdirectory(
     external/glad
 )
 
+add_subdirectory(
+    external/glm
+)
+
+add_subdirectory(
+    Engine
+)
+
 # Add target include directory here:
 target_include_directories(${PROJECT_NAME}
     PUBLIC external/glfw/include
     PUBLIC build/external/glad/include
+    PUBLIC external/glm
+    PUBLIC include/
 )
 
 # Add target link directory here: (Where the Libs are)
 target_link_directories(${PROJECT_NAME}
     PRIVATE external/glfw/src
     PRIVATE external/glad
+    PRIVATE Engine
 )
 
 # Link needed Libs:
-target_link_libraries(${PROJECT_NAME} glfw glad)
+target_link_libraries(${PROJECT_NAME} glfw glad Engine)
