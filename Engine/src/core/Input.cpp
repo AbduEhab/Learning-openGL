@@ -1,6 +1,6 @@
 #include "core/Input.h"
 
-namespace Engine
+namespace TUNA
 {
 	namespace Input
 	{

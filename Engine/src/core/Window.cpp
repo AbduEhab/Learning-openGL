@@ -1,7 +1,7 @@
 #include "core/Window.h"
 #include "core/Input.h"
 
-namespace Engine
+namespace TUNA
 {
 	void Window::set_handlers()
 	{

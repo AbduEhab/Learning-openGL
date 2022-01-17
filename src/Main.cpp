@@ -4,7 +4,7 @@ double TICKS_LAST_FRAME = 0;
 
 static double deltaTime = glfwGetTime();
 
-static Engine::Window *window;
+static TUNA::Window *window;
 
 struct Vertex
 {
@@ -21,12 +21,12 @@ void Update(float deltatime)
 
         TICKS_LAST_FRAME = glfwGetTime();
 
-        if (Engine::Input::is_key_down(GLFW_KEY_ESCAPE))
+        if (TUNA::Input::is_key_down(GLFW_KEY_ESCAPE))
         {
             window->close();
         }
 
-        if (Engine::Input::is_key_down(GLFW_KEY_ENTER) && Engine::Input::is_key_down(GLFW_KEY_RIGHT_ALT))
+        if (TUNA::Input::is_key_down(GLFW_KEY_ENTER) && TUNA::Input::is_key_down(GLFW_KEY_RIGHT_ALT))
         {
             return; // temp till I figure out why it lags
 
@@ -34,7 +34,7 @@ void Update(float deltatime)
 
             glfwDestroyWindow(window->_window);
 
-            window = Engine::Window::create_window(!full);
+            window = TUNA::Window::create_window(!full);
 
             std::cout << "comb reg" << std::endl;
         }
@@ -116,7 +116,7 @@ int main(int, char **)
         return -1;
     }
 
-    window = Engine::Window::create_window(1280, 720, "Learning-GL", false);
+    window = TUNA::Window::create_window(1280, 720, "Learning-GL", false);
 
     // gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
@@ -129,6 +129,6 @@ int main(int, char **)
         Render(window->_window);
     }
 
-    Engine::Window::free_window(window);
+    TUNA::Window::free_window(window);
     glfwTerminate();
 }

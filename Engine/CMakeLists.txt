@@ -1,6 +1,10 @@
 project(Engine VERSION 0.1.0)
 
-add_library(${PROJECT_NAME} src/core/Input.cpp src/core/Window.cpp)
+add_library(${PROJECT_NAME} 
+    src/core/Input.cpp 
+    src/core/Window.cpp
+    src/renderer/Shader.cpp
+)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC include/

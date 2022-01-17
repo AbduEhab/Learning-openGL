@@ -2,7 +2,7 @@
 
 #include "Constants.h"
 
-namespace Engine
+namespace TUNA
 {
 	class Window
 	{

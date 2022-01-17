@@ -59,7 +59,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_directories(${PROJECT_NAME}
     PRIVATE external/glfw/src
     PRIVATE external/glad
-    PRIVATE Engine
+    PRIVATE Engine/
 )
 
 # Link needed Libs:
