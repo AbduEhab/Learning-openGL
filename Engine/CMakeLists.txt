@@ -4,6 +4,7 @@ add_library(${PROJECT_NAME}
     src/core/Input.cpp 
     src/core/Window.cpp
     src/renderer/Shader.cpp
+    src/util/FileOperations.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

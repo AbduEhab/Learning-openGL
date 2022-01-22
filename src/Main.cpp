@@ -106,7 +106,20 @@ void error_callback(int error, const char *description)
     fprintf(stderr, "Error: %s\n", description);
 }
 
-int main(int, char **)
+void GLAPIENTRY MessageCallback(GLenum source,
+                                GLenum type,
+                                GLuint id,
+                                GLenum severity,
+                                GLsizei length,
+                                const GLchar *message,
+                                const void *userParam)
+{
+    fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+            (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+            type, severity, message);
+}
+
+int main(int, char *args[])
 {
     glfwSetErrorCallback(error_callback);
 
@@ -122,11 +135,21 @@ int main(int, char **)
 
     gladLoadGL();
 
-    while (!glfwWindowShouldClose(window->_window))
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(MessageCallback, 0);
+    // std::string a = TUNA::IO::read_file(BINARY_DIRECTORY + "a");
+
     {
-        glfwPollEvents();
-        Update(deltaTime);
-        Render(window->_window);
+        TUNA::Shader s("s", BINARY_DIRECTORY + "a");
+
+        s.bind();
+
+        while (!glfwWindowShouldClose(window->_window))
+        {
+            glfwPollEvents();
+            Update(deltaTime);
+            Render(window->_window);
+        }
     }
 
     TUNA::Window::free_window(window);
