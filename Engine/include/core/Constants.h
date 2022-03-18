@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 #include <iostream>
-#include <unistd.h>
+
 #include <fstream>
 
 #include <GLFW/glfw3.h>
@@ -15,11 +15,33 @@
 #include <chrono>
 #include <sstream>
 
+#ifdef _WIN32
+
+#include <windows.h>
+#include <direct.h>
+
+const std::string BINARY_DIRECTORY(_getcwd(NULL, 0));
+
+//TCHAR buffer[MAX_PATH] = { 0 };
+//GetModuleFileName(NULL, buffer, MAX_PATH);
+//std::wstring::size_type pos = std::wstring(buffer).find_last_of(L"\\/");
+//auto t = std::wstring(buffer).substr(0, pos);
+
+#else
+
+#include <unistd.h>
+#include <filesystem>
+
+const std::string BINARY_DIRECTORY(std::string((char*)std::filesystem::current_path().c_str()) + "/");
+const std::string BINARY_DIRECTORY_TEST(std::string(get_current_dir_name()) + "/");
+
+#endif
+
 #define FPS 60
 #define FRAME_TIME_TARGET (1000.0f / FPS)
 
 using Clock = std::chrono::high_resolution_clock;
-using TimePoint = std::chrono::_V2::system_clock::time_point;
+using TimePoint = std::chrono::system_clock::time_point;
 
 #ifdef DEBUG
 #define Debug(x) x;
@@ -32,4 +54,5 @@ using TimePoint = std::chrono::_V2::system_clock::time_point;
 #define DebugPrint(x) ;
 #endif // NDEBUG
 
-const std::string BINARY_DIRECTORY(std::string(get_current_dir_name()) + "/");
+
+
