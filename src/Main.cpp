@@ -17,9 +17,9 @@ void Update(float deltatime)
     {
         deltaTime = glfwGetTime() - TICKS_LAST_FRAME;
 
-        std::cout << deltaTime << std::endl;
-
         TICKS_LAST_FRAME = glfwGetTime();
+
+        glfwSetWindowTitle(window->_window, (std::string("Learning-GL | ") + std::to_string(deltaTime)).c_str());
 
         if (TUNA::Input::is_key_down(GLFW_KEY_ESCAPE))
         {
@@ -65,18 +65,18 @@ const Vertex challenge1Square[]{
 
 const int challenge1Elements[]{0, 1, 1, 2, 2, 3, 3, 0};
 
-void Render(GLFWwindow *window)
+uint32_t challenge1Vao;
+uint32_t challenge1Vbo;
+uint32_t challenge1Ebo;
+
+void prepare_challenge1(GLFWwindow *window)
 {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
 
-    glClearColor(0.266f, 0.466f, 0.698f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    uint32_t challenge1Vao;
-    uint32_t challenge1Vbo;
-    uint32_t challenge1Ebo;
+    // glClearColor(0.266f, 0.466f, 0.698f, 1.0f);
+    // glClear(GL_COLOR_BUFFER_BIT);
 
     glCreateVertexArrays(1, &challenge1Vao);
     glBindVertexArray(challenge1Vao);
@@ -94,10 +94,17 @@ void Render(GLFWwindow *window)
     glGenBuffers(1, &challenge1Ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, challenge1Ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(challenge1Elements), challenge1Elements, GL_STATIC_DRAW);
+};
 
+void render_challange1()
+{
     glBindVertexArray(challenge1Vao);
     glDrawElements(GL_LINES, 8, GL_UNSIGNED_INT, 0);
+};
 
+void Render(GLFWwindow *window)
+{
+    render_challange1();
     glfwSwapBuffers(window);
 }
 
@@ -140,9 +147,13 @@ int main(int, char *args[])
     // std::string a = TUNA::IO::read_file(BINARY_DIRECTORY + "a");
 
     {
-        TUNA::Shader s("s", BINARY_DIRECTORY + "a");
+        TUNA::Shader s("s", BINARY_DIRECTORY + "assets/shaders/a");
+
+        std::cout << BINARY_DIRECTORY << std::endl;
 
         s.bind();
+
+        prepare_challenge1(window->_window);
 
         while (!glfwWindowShouldClose(window->_window))
         {

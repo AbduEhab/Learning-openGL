@@ -21,8 +21,8 @@ add_custom_command(
 add_custom_command(
      TARGET ${PROJECT_NAME} POST_BUILD
      COMMAND ${CMAKE_COMMAND} -E copy
-          ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}
-          ${CMAKE_SOURCE_DIR}/bin/
+          ${CMAKE_SOURCE_DIR}/bin/assets
+          ${CMAKE_CURRENT_BINARY_DIR}/assets
 )
 
 # # Set a symbolic link so the binary can find a required relative folder
@@ -39,6 +39,16 @@ add_custom_command(
 #     DEPENDS ${link_dst} 
 #     COMMENT "symbolic link ${link_src} => ${link_dst}" 
 # )
+
+else()
+
+#copy engine related files to binary location
+add_custom_command(
+     TARGET ${PROJECT_NAME} POST_BUILD
+     COMMAND ${CMAKE_COMMAND} -E copy_directory
+          ${CMAKE_SOURCE_DIR}/bin/assets
+          ${CMAKE_CURRENT_BINARY_DIR}/Debug/assets
+)
 
 endif()
 

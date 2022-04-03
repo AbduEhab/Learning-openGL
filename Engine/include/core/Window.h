@@ -12,7 +12,7 @@ namespace TUNA
 		int _height;
 		bool _is_fullscreen;
 
-		static Window *create_window(int width = 1280, int height = 720, const char *title = "Untitled", bool fullScreenMode = false);
+		static Window *create_window(int width = 1280, int height = 720, const std::string & = "Untitled", bool fullScreenMode = false);
 		static void free_window(Window *window);
 		void set_handlers();
 		void close();

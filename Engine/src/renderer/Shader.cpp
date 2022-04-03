@@ -11,6 +11,7 @@ namespace TUNA
 
         std::string file = IO::read_file(filepath);
 
+        //split the file into the vertex and fragment shader
         process_shaders(file);
 
         _vertex_shader = compile(GL_VERTEX_SHADER, _shader_source_code.vertex_shader);
@@ -33,7 +34,12 @@ namespace TUNA
 
             char *message = (char *)alloca(length * sizeof(char));
             glGetProgramInfoLog(program_id, length, &length, message);
-            printf("ERROR: SHADER_LINKING_FAILED\n '%s'", message);
+            std::cout << "ERROR: SHADER_LINKING_FAILED\n" << message << "\n" << std::endl;
+
+            //print file and function
+            std::cout << "File: " << filepath << std::endl;
+            std::cout << "Function: " << __FUNCTION__ << std::endl;
+
             glDeleteShader(_vertex_shader);
             glDeleteShader(_fragment_shader);
         }
@@ -124,6 +130,13 @@ namespace TUNA
 
     void Shader::create_program()
     {
+    }
+
+    void Shader::debug_print()
+    {
+        std::cout << "Shader: " << _name << std::endl;
+        std::cout << "Vertex Shader: " << _shader_source_code.vertex_shader << std::endl;
+        std::cout << "Fragment Shader: " << _shader_source_code.fragment_shader << std::endl;
     }
 
 } // namespace Tuna

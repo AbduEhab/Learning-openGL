@@ -40,10 +40,13 @@ namespace TUNA
         void upload_uniform_mat3(const std::string &name, const glm::mat3 &matrix);
         void upload_uniform_mat4(const std::string &name, const glm::mat4 &matrix);
 
+        void debug_print();
+
     private:
         uint32_t _id;          // the shader's id that is used to reference the shader
         std::string _filepath; // the path of the _source_code
         std::string _name;     // user defined name of shader
+        
         struct _shader_source_code
         {
             std::string vertex_shader;
@@ -72,11 +75,5 @@ namespace TUNA
         Shader &get(const std::string &name);
 
         bool exists(const std::string &name) const;
-    };
-
-    struct ShaderSrc
-    {
-        std::string vertex_src;
-        std::string fragment_src;
     };
 }

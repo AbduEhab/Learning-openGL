@@ -21,7 +21,7 @@ namespace TUNA
 			glfwSetWindowShouldClose(_window, GLFW_TRUE);
 		}
 	}
-	Window *Window::create_window(int width, int height, const char *title, bool fullScreenMode)
+	Window *Window::create_window(int width, int height, const std::string &title, bool fullScreenMode)
 	{
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -36,7 +36,7 @@ namespace TUNA
 
 		GLFWmonitor *primaryMonitor = fullScreenMode ? glfwGetPrimaryMonitor() : nullptr;
 
-		res->_window = glfwCreateWindow(width, height, title, primaryMonitor, nullptr);
+		res->_window = glfwCreateWindow(width, height, title.c_str(), primaryMonitor, nullptr);
 
 		res->_is_fullscreen = fullScreenMode;
 
